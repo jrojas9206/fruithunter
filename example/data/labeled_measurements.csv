@@ -1,0 +1,9 @@
+basename,date,line,position,nb_point_fruit_detected,nb_fruit_detected,volumes
+pc_2018_08_02_L01_P17_filtered_labeled.txt,2018_08_02,01,17,0,0,0
+pc_2018_08_02_L02_P15_filtered_labeled.txt,2018_08_02,02,15,0,0,0
+pc_2018_08_02_L02_P01_filtered_labeled.txt,2018_08_02,02,01,2330,8,1121.9578543749979
+pc_2018_08_02_L01_P20_filtered_labeled.txt,2018_08_02,01,20,22489,39,9465.23884338612
+pc_2018_08_02_L01_P10_filtered_labeled.txt,2018_08_02,01,10,1728,2,243.6308569414203
+pc_2018_08_02_L04_P09_filtered_labeled.txt,2018_08_02,04,09,5198,35,13469.09931444354
+pc_2018_08_02_L02_P08_filtered_labeled.txt,2018_08_02,02,08,11999,87,34364.47848444871
+pc_2018_08_02_L01_P15_filtered_labeled.txt,2018_08_02,01,15,26989,88,21824.80516248802
