@@ -7,8 +7,7 @@ The fruithunter pipeline was developed to segment and count apples from point cl
 <figure>
     <img src="notebook/imgs/protocols.png"
          alt="Protocols" 
-         width="400" 
-         height="500">
+         width="400">
     <figcaption>Figure 1. Field measurement protocols schematic. Green circles labeled with a "T" represent the apple trees. Gray circles labelled with an "S" represent the sensor position at the moment of the measurement. The low and hight resolution protocol are presented in the left and right part of the figure respectivelly. </figcaption>
 </figure>
 
