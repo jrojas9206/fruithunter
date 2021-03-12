@@ -17,9 +17,8 @@ By default, X,Y,Z coordinates are infered from Lidar scans but other radiometric
 
 <figure>
     <img src="notebook/imgs/density.png"
-         alt="Protocols" 
-         width="400" 
-         height="500">
+         alt="density" 
+         width="400">
     <figcaption>Figure 2. Point cloud density for the low resolution protocol</figcaption>
 </figure>
 
@@ -28,8 +27,7 @@ From this noisy data set, it is not possible to define a simple set of rules to 
 <figure>
     <img src="notebook/imgs/fruithunter.png"
          alt="Fruithunter Pipeline" 
-         width="600" 
-         height="700">
+         width="600">
     <figcaption>Figure 3. The fruithunter pipeline</figcaption>
 </figure>
 
@@ -46,8 +44,7 @@ RandLA-NET is a state-of-the-art deep learning model developed to consume raw po
 <figure>
     <img src="notebook/imgs/rdnet_layers.png"
          alt="rdnet layers" 
-         width="600" 
-         height="700">
+         width="600">
     <figcaption>Figure 4. RandLA-NET main Layers</figcaption>
 </figure>
 
@@ -55,9 +52,8 @@ The <i>local spatial encoding</i> is applied on each point and determine and enc
 
 <figure>
     <img src="notebook/imgs/receptiveFields.png"
-         alt="rdnet layers" 
-         width="400" 
-         height="500">
+         alt="receptiveFields" 
+         width="400">
     <figcaption>Figure 5. Dilated residual block, Global feature extraction</figcaption>
 </figure>
 
