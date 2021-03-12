@@ -5,7 +5,7 @@
 The fruithunter pipeline was developed to segment and count apples from point clouds resulting of scans of apples orchards. Different measurement protocols were considered for orchard scans. As illustrated in figure 1, two main protocol were considered. In the first one, scans are positionned every five trees in the middle of the surounding rows. In the second protocol, scans are performed from close positions in the left and right rows of each tree. The protocols are named low and high resolution protocols respectivelly.
 
 <figure>
-    <img src="imgs/protocols.png"
+    <img src="notebook/imgs/protocols.png"
          alt="Protocols" 
          width="400" 
          height="500">
@@ -17,7 +17,7 @@ Each protocol set different levels of precision in the description of the apples
 By default, X,Y,Z coordinates are infered from Lidar scans but other radiometric features can be considered. In our case, from real scans, reflectance, deviation and amplitude of the signal can be considered for each points. 
 
 <figure>
-    <img src="imgs/density.png"
+    <img src="notebook/imgs/density.png"
          alt="Protocols" 
          width="400" 
          height="500">
@@ -27,7 +27,7 @@ By default, X,Y,Z coordinates are infered from Lidar scans but other radiometric
 From this noisy data set, it is not possible to define a simple set of rules to segment apples. To handle this complex signal, different approaches from machine and deep learning are going to be used. The first one will use random forest as a segmentation module and will use the FPFH as a feature descriptor. The second approach will use RandLA-NET, a deep learning model specially designed to consume point clouds with millions of points  and make segmentation of multiple elements in a efficient way. The global workflow of the pipeline could bee see it on figure 3. The Random Forest and RandLA-NET models will be detailled in the following sections.
 
 <figure>
-    <img src="notebooks/imgs/fruithunter.png"
+    <img src="notebook/imgs/fruithunter.png"
          alt="Fruithunter Pipeline" 
          width="600" 
          height="700">
@@ -45,7 +45,7 @@ In this project random forests are fitted with 33 features (FPFH) or 36 if the r
 RandLA-NET is a state-of-the-art deep learning model developed to consume raw point clouds of large size (>1M) and perform segmentation with good accuracy. In order to achieve this objective, 3 new layers were developed as illustrated in figure 4.   
 
 <figure>
-    <img src="notebooks/imgs/rdnet_layers.png"
+    <img src="notebook/imgs/rdnet_layers.png"
          alt="rdnet layers" 
          width="600" 
          height="700">
@@ -55,7 +55,7 @@ RandLA-NET is a state-of-the-art deep learning model developed to consume raw po
 The <i>local spatial encoding</i> is applied on each point and determine and encode the relative XYZ coordinates of all the neighbouring points with additionnal point features. Particularly this layer allows the network to abstract complex geometries. The <i>Attentive Pooling</i> layer is used to aggregate neighbouring point features using attention score for each feature. At the end these two layers will generate a informative feature vector with the most representative features and points. Finally the <i>Dilated residual block</i> will be in charge of stacking and propagating the features vector to neighboring points to increasing the receptive field that represent each point. A graphical representation of this process could be see it in the figure 5. 
 
 <figure>
-    <img src="notebooks/imgs/receptiveFields.png"
+    <img src="notebook/imgs/receptiveFields.png"
          alt="rdnet layers" 
          width="400" 
          height="500">
