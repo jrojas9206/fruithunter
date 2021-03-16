@@ -375,11 +375,11 @@ def launch_training(protocol, inputDir, parameters=None):
     dataset = AppleTree(protocol, path2dataset=inputDir)
     dataset.init_input_pipeline(mode=Mode)
     
-    if Mode == 'train' and not parameters["restoreTrain"]:
+    if Mode == 'train' and not parameters["trainFromCHK"]:
         model = Network(dataset, cfg)
         model.train(dataset)
 
-    elif Mode == "train" and parameters["restoreTrain"]:
+    elif Mode == "train" and parameters["trainFromCHK"]:
         model = Network(dataset, cfg, restore_snap=parameters["model_path"])
         model.train(dataset)
 
@@ -436,26 +436,50 @@ def launch_training(protocol, inputDir, parameters=None):
                 Plot.draw_pc_sem_ins(pc_xyz[0, :, :], labels[0, :])
                 Plot.draw_pc_sem_ins(sub_pc_xyz[0, :, :], labels[0, 0:np.shape(sub_pc_xyz)[1]])
 
-def train_field(inputDir, outputDir, parameters=None):
+def train_field(parameters):
     global cfg
     cfg = cfg_field
-    cfg.saving_path = outputDir
+    cfg.saving_path = parameters["path2output"]
     print(cfg.saving_path, flush=True)
-    launch_training("field", inputDir, parameters=parameters)
+    launch_training("field", parameters["path2data"], parameters=parameters)
 
-def train_field_only_xyz(inputDir, outputDir, parameters=None):
+def train_field_only_xyz(parameters):
     global cfg
     cfg = cfg_field
-    cfg.saving_path = outputDir
+    cfg.saving_path = parameters["path2output"]
     print(cfg.saving_path, flush=True)
-    launch_training("field_only_xyz", inputDir, parameters=parameters)
+    launch_training("field_only_xyz", parameters["path2data"], parameters=parameters)
 
-def train_synthetic_HiHiRes(inputDir, outputDir, parameters=None):
+def train_synthetic_HiHiRes(parameters):
     global cfg
     cfg = cfg_synthetic
-    cfg.saving_path = outputDir
+    cfg.saving_path = parameters["path2output"]
     print(cfg.saving_path, flush=True)    
-    launch_training("synthetic_HiHiRes", inputDir, parameters=parameters)
+    launch_training("synthetic_HiHiRes", parameters["path2data"], parameters=parameters)
+
+def randlanet_train(parameters):
+    parameters["mode"]="train"
+    if(parameters["protocol"] == "synthetic"):
+        train_synthetic_HiHiRes(parameters)
+    elif(parameters["protocol"] == "field_only_xyz"):
+        train_field_only_xyz(parameters)
+    elif(parameters["protocol"] == "field"):
+        train_field(parameters)
+    else:
+        return -1
+    return 0
+
+def randlanet_predict(parameters):
+    parameters["mode"]="test"
+    if(parameters["protocol"] == "synthetic"):
+        train_synthetic_HiHiRes(parameters)
+    elif(parameters["protocol"] == "field_only_xyz"):
+        train_field_only_xyz(parameters)
+    elif(parameters["protocol"] == "field"):
+        train_field(parameters)
+    else:
+        return -1
+    return 0
 
 if __name__ == '__main__':
     parser.add_argument('--gpu', type=int, default=0, help='GPU ID [default: 0]')
@@ -463,12 +487,12 @@ if __name__ == '__main__':
     parser.add_argument('--model_path', type=str, default='None', help='pretrained model path')
     parser.add_argument('--inputDir', type=str, help="Path to the folder with the train/test/validation & the input folders", default=None)
     parser.add_argument("--outputDir", type=str, help="Path to the output folder", default="./output/")
-    parser.add_argument("--protocol", type=str, help="Measurement protocol /synthetic/field_xyz/filed", default="synthetic")
-    parser.add_argument("--restoreTrain", type=bool, help="Restore training True/False", default=False)
+    parser.add_argument("--protocol", type=str, help="Measurement protocol /synthetic/field_xyz/field", default="synthetic")
+    parser.add_argument("--trainFromCHK", type=bool, help="Train from checkpoint True/False", default=False)
     args = parser.parse_args()
     # Parameters copy to be able to use launch_training in other projects 
     param = {"gpu":args.gpu, "mode":args.mode, "model_path":args.model_path, "path2data":args.inputDir, 
-             "path2output": args.outputDir, "protocol":args.protocol, "restoreTrain":args.restoreTrain} 
+             "path2output": args.outputDir, "protocol":args.protocol, "trainFromCHK":args.trainFromCHK} 
     print("-> RandLA-NET")
     print(" -> GPU[ID]: %i" %args.gpu)
     print(" -> Mode[train/test/vis]: %s" %args.mode)
@@ -478,11 +502,11 @@ if __name__ == '__main__':
     print("  -> Status: %s"%("OK" if os.path.isdir(args.inputDir) else "Error"))
     print(" -> Protocol: %s" %args.protocol)
     if(args.protocol == "synthetic"):
-        train_synthetic_HiHiRes(args.inputDir, args.outputDir, parameters=param)
+        train_synthetic_HiHiRes(param)
     elif(args.protocol == "field_only_xyz"):
-        train_field_only_xyz(args.inputDir, args.outputDir, parameters=param)
+        train_field_only_xyz(param)
     elif(args.protocol == "field"):
-        train_field(args.inputDir, args.outputDir, parameters=param)
+        train_field(param)
     else:
         print("-> Error: Unknow options, please execute the following command and verify the defined args. \n$$>python main_apple_tree.py -h")
     print("-> END")
