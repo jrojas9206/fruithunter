@@ -11,9 +11,9 @@ import sklearn.utils
 import sklearn.model_selection
 import tensorflow as tf
 from tensorflow import keras
-import myio
-from RFClassifier import RFClassifier
-from NNClassifier import NNClassifier
+import machine_learning.myio
+from machine_learning.RFClassifier import RFClassifier
+from machine_learning.NNClassifier import NNClassifier
 import logging
 
 
@@ -72,7 +72,7 @@ def field_predict_rf():
     predict(model, model_filename, input_dir, output_dir)
 
 
-if __name__:
+if (__name__=="__main__"):
     parser = argparse.ArgumentParser(description='Random forest predicton script')
     parser.add_argument("model", type=str, help="Path to the model to load")
     parser.add_argument("path2data", type=str, help="Path to the data that want to be predicted")

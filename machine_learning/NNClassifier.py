@@ -18,7 +18,7 @@ import sklearn.utils
 import sklearn.metrics
 
 
-from ModelClassifier import ModelClassifier
+from machine_learning.ModelClassifier import ModelClassifier
 
 
 class NNClassifier(ModelClassifier):

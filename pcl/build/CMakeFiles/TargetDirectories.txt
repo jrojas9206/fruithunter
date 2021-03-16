@@ -1,0 +1,4 @@
+/media/juan/jprb/PhD_2020_2023/repos/github/fruithunter/pcl/build/CMakeFiles/edit_cache.dir
+/media/juan/jprb/PhD_2020_2023/repos/github/fruithunter/pcl/build/CMakeFiles/my_feature.dir
+/media/juan/jprb/PhD_2020_2023/repos/github/fruithunter/pcl/build/CMakeFiles/rebuild_cache.dir
+/media/juan/jprb/PhD_2020_2023/repos/github/fruithunter/pcl/build/CMakeFiles/my_segmentation.dir
