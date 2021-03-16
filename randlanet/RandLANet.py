@@ -5,7 +5,7 @@ from sklearn.metrics import confusion_matrix
 from randlanet.helper_tool import DataProcessing as DP
 import tensorflow as tf
 import numpy as np
-import randlanet.helper_tf_util
+import randlanet.helper_tf_util as helper_tf_util
 import time
 
 
