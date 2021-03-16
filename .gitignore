@@ -1,0 +1,5 @@
+fruithunter.egg-info/
+*.pyc
+.ipynb_checkpoints
+*.o
+CMakeCache.txt
