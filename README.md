@@ -108,11 +108,6 @@ mkdir pcl/build
 ```bash
 cd pcl/build; cmake .. ; make ; cd -
 ```
-  <li> Get the Randla-NET repository: <br>
-
-```bash
-    git clone https://github.com/jrojas9206/RandLA-Net.git randlanet
-```
      
   <li> Compile the wrappers for Randla-NET:
 
