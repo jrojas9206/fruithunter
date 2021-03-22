@@ -73,15 +73,15 @@ def restore_data(strPath):
     for path2create in [path2o, path2c, path2a]:
         if(not os.path.isdir(path2create)):
             os.mkdir(path2create)
-            print("-> folder was created: %s" %path2create)
+            print(" -> folder was created: %s" %path2create)
     # Walk ove the list of file neames, download the data, delete the desired columns and save the new files 
     for idx, fname in enumerate(lst_files, start=1):
-        print("-> Loading[%i/%i]: %s" %(len(lst_files), idx, get_fileNameFromPath(fname)["fileName"]))
+        print("   -> Loading[%i/%i]: %s" %(len(lst_files), idx, get_fileNameFromPath(fname)["fileName"]))
         # Original files 
         w_pc = np.loadtxt(fname)
         # save the files  
         for path2save, col2rm in zip([path2o, path2c, path2a], [6, [3,4,5], [3,4,5,6]]):
-            bck = np.delete(w_pc, col2rm, axis=1)
+            bck    = np.delete(w_pc, col2rm, axis=1)
             p2save = os.path.join(path2save, get_fileNameFromPath(fname)["fileName"])
             np.savetxt(p2save, bck)
     return 0 
@@ -90,20 +90,21 @@ def main(argv):
     parser = argparse.ArgumentParser("Download, uncompress or prepare the data")
     parser.add_argument("--action",   type=str, help="download, uncompress, no action", default="noaction")
     parser.add_argument("--path2tar", type=str, help="Path to tar or tar.gz file", default="data/data.tar.xz")
-    parser.add_argument("--path2data",type=str, help="Path to the folder with the data", default="data/")
+    parser.add_argument("--path2data",type=str, help="Path to the folder with the data", default="data/merged_xyz_radiometric_Clusters_Annotations/")
     parser.add_argument("--path2out", type=str, help="Path to uncompress the files", default="data/")
     args = parser.parse_args()
     #
     if(args.action == "uncompress"):
+        print("-> Uncompressing")
         uncompress_tar(args.path2tar, folder2unc=args.path2out)
-    elif(args.action == "download"):
-        download_data(args.path2out)
     elif(args.action == "noaction"):
+        print("-> No especial action is going to be done")
         pass
     else:
         print("-> Unknown action %s" %(args.action))
+    outFpath = os.path.join(args.path2out, "merged_xyz_radiometric_Clusters_Annotations/")
     # Restore the data 
-    restore_data(args.path2out if args.action == "uncompress" or args.action=="download" else args.path2data)
+    restore_data(outFpath if args.action == "uncompress" else args.path2data)
     return 0
 
 if(__name__=="__main__"):
