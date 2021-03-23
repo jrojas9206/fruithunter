@@ -6,6 +6,65 @@ import tarfile
 import argparse 
 import numpy as np 
 
+from sklearn.model_selection import train_test_split
+from randlanet.utils.data_prepare_apple_tree import * 
+from pcl.launcher import launch_feature
+
+def dataSet(path2files, path2output, model, verbose=False, protocol="field"):
+    """
+    :INPUT:
+        path2files : str of the path to the folder of input files
+        path2output: str of the path to the output folder 
+        model      : str, "rdf" or "rdnet"
+        verbose    : If true print few message of the code steps 
+        protocol   : Type of protocol to handle ; synthetic/field/field_only_xyz
+    :OUTPUT:
+        Write the splitted dataset  on the folder
+    """
+    # NOTE: This segment will be only executed from the notebook 
+    lstOfFiles = glob.glob(os.path.join(path2files,"*.txt"))
+    if(verbose):
+        print("Found files: %i " %(len(lstOfFiles)))
+    # Split the files
+    X_train, X_test, _,_ = train_test_split(lstOfFiles, range(len(lstOfFiles)), test_size=0.20, random_state=42)
+    if(verbose):
+        print(" -> Train set: %i" %len(X_train))
+        print(" -> Test set : %i" %len(X_test))
+    # Create the directory to keep the test and train sets 
+    path2initialSplit = path2output #os.path.join(data2annotatedApples, "dataToRDF")
+    if(not os.path.isdir(path2initialSplit)):
+        os.mkdir(path2initialSplit)
+    lst_folders = []
+    if(model=="rdf"):
+        lst_folders = ["test", "train"]
+    elif(model=="rnet"):
+        lst_folders = ["test", "training"]
+    else:
+        return -1
+    for folderName, fileList in zip( lst_folders,[X_test, X_train]):
+        path2saveData = os.path.join(path2initialSplit)
+        for file2feature in fileList:
+            output2wrt = os.path.join(path2saveData, folderName)
+            if(not os.path.isdir(output2wrt)):
+                os.mkdir(output2wrt)
+                print("Folder was created: %s" %output2wrt)
+            print("-> Loading: %s" %os.path.split(file2feature)[1])
+            file2wrt = os.path.join(output2wrt, os.path.split(file2feature)[1])
+            if(model == "rdf"):
+                # NOTE: If you change the position or the name of the feature generator change the
+                # next string "cmd2feature" [execution command]
+                cmd2features = "./../pcl/build/my_feature %s %.3f %s %s" %("fpfh",          # Feature extractor 
+                                                                        0.025,           # Grid size 
+                                                                        file2feature,    # Input File
+                                                                        file2wrt)        # Output File
+                print(" -> Running feature extractor")
+                os.system(cmd2features)
+            else: # RandLA-NET
+                if(folderName=="test"):
+                    convert_for_test(file2feature, path2saveData, grid_size=0.001, protocol=protocol)
+                else:
+                    convert_for_training(file2feature, None, path2saveData, grid_size=0.001, protocol=protocol)
+
 def uncompress_tar(strPath2file, folder2unc=None):
     """
     Uncompress a tar file
@@ -89,9 +148,9 @@ def restore_data(strPath):
 def main(argv):
     parser = argparse.ArgumentParser("Download, uncompress or prepare the data")
     parser.add_argument("--action",   type=str, help="download, uncompress, no action", default="noaction")
-    parser.add_argument("--path2tar", type=str, help="Path to tar or tar.gz file", default="data/data.tar.xz")
-    parser.add_argument("--path2data",type=str, help="Path to the folder with the data", default="data/merged_xyz_radiometric_Clusters_Annotations/")
-    parser.add_argument("--path2out", type=str, help="Path to uncompress the files", default="data/")
+    parser.add_argument("--path2tar", type=str, help="Path to tar or tar.gz file", default="../data.tar.xz")
+    parser.add_argument("--path2data",type=str, help="Path to the folder with the data", default="../data/merged_xyz_radiometric_Clusters_Annotations/")
+    parser.add_argument("--path2out", type=str, help="Path to uncompress the files", default="../data/")
     args = parser.parse_args()
     #
     if(args.action == "uncompress"):

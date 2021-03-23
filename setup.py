@@ -38,7 +38,8 @@ setup(
         'pcl',
         'pcl.build',
         'randlanet',
-        'randlanet.utils'
+        'randlanet.utils',
+        'notebook'
     ],
 
     # python packages directory
