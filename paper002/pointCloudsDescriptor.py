@@ -4,7 +4,7 @@ import glob
 import math 
 import argparse 
 import numpy as np 
-import open3d as o3d
+#import open3d as o3d
 from sklearn.neighbors import KDTree
 
 class PointCloudFEvaluator(object):
@@ -132,7 +132,7 @@ class PointCloudFEvaluator(object):
         """
         return math.sqrt(1/pointDensity)
 
-    def get_point_cloud_avg_density(self, pc, radius=0.1):
+    def get_point_cloud_density(self, pc, radius=0.1):
         """
         Get the point density of a point cloud from several 
         density measurements arround the point cloud  
@@ -151,11 +151,17 @@ class PointCloudFEvaluator(object):
         # evaluate sphere 
 
         kdt_rep = KDTree(pc, leaf_size=2)
-        lstDens = []
-        for idx, _ in enumerate( range(pc.shape[0]) ):
-            nPts = kdt_rep.query_radius(pc[idx].reshape(1,-1), r=radius, count_only=True)
-            lstDens.append( float(nPts/( radius**2 )) )
+        nPts = kdt_rep.query_radius(pc, r=radius, count_only=True)
+        lstDens = nPts/( radius**2 )
         return lstDens
+
+    def get_pgl_point_cloud_density(self, pc, radius=0.1):
+        import openalea.plantgl.all as pgl
+        k = 15
+        kclosests = pgl.k_closest_points_from_ann(pc, k, True)
+        rnbgs = pgl.r_neighborhoods(pc, kclosests, radius, True)
+        densities = pgl.densities_from_r_neighborhood(rnbgs, radius)
+        return densities.to_array()
 
     def experiment_mean_density(self, pcStrList, lstPC_gdescriptor):
         """
