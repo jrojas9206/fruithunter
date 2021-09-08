@@ -16,7 +16,7 @@ def main(argv):
     olst_file = glob.glob( os.path.join( args.output, "*.txt" ) )
     olst_file = [ os.path.split( i )[-1] for i in olst_file ]
     print(" -> Found Files: %i" %(len(lst_file)))
-    eps, minSamples = 0.1, 20 
+    eps, minSamples = 0.1, 17
     for idx, afile in enumerate(lst_file):
         fname = os.path.split( afile )[-1]
         if("high" in fname or fname in olst_file or "2019" in fname ):
@@ -24,7 +24,7 @@ def main(argv):
             continue
         print("-> Loading[%i/%i]: %s" %(idx, len(lst_file), fname))
         a_pc = np.loadtxt(afile)
-        cluster = clustering(a_pc, minSamples, eps)
+        cluster = clustering(a_pc, minSamples, eps, leafSize=18)
         p2wrt = os.path.join( args.output, fname )
         print("-> saving: %s" %p2wrt)
         np.savetxt(p2wrt, cluster)
