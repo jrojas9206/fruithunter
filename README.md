@@ -64,6 +64,16 @@ To count the number of fruits, a clustering algorithm is used. The <i>DBSCAN</i>
 
 DBSCAN is parameterized with two main elements: a distance threshold (<i>eps</i>) that specifies how close should be a group of points to be in the same cluster, and a minimum number of points to consider a region as dense.  
 
+### Results 
+
+
+<figure>
+    <img src="notebook/imgs/results.png"
+         alt="results" 
+         width="600">
+    <figcaption>Figure 6. Application of the pipeline onto one scane of apple tree</figcaption>
+</figure>
+
 
 ## Installation 
 
