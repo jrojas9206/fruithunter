@@ -21,7 +21,7 @@ def filtering(point_cloud, cluster_eps, cluster_size):
     return db.labels_ >= 0
 
 
-def clustering(pc, min_samples, eps, filter_cluster_size=None, filter_cluster_eps=None):
+def clustering(pc, min_samples, eps, filter_cluster_size=None, filter_cluster_eps=None, leafSize=18):
 
     labels = -1 * numpy.ones((pc.shape[0], 1), dtype=numpy.int)
     cond = numpy.full((pc.shape[0], ), True)
@@ -35,6 +35,7 @@ def clustering(pc, min_samples, eps, filter_cluster_size=None, filter_cluster_ep
         if pc_filtered.shape[0] > 0:
             db = sklearn.cluster.DBSCAN(min_samples=min_samples,
                                         eps=eps,
+                                        leaf_size=leafSize,
                                         metric="euclidean",
                                         algorithm="ball_tree").fit(pc_filtered)
 
