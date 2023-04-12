@@ -10,7 +10,7 @@ def runit(cmd):
     print(cmd)
     subprocess.run(cmd)
 
-def launch_feature(intput_dir, output_dir):
+def launch_feature(intput_dir, output_dir, cores=4):
 
     regex = os.path.join(intput_dir, "*.txt")
 
@@ -28,12 +28,11 @@ def launch_feature(intput_dir, output_dir):
                          input_filename,
                          output_filename])
 
-    nb_process = 14
-    pool = multiprocessing.Pool(nb_process)
+    pool = multiprocessing.Pool(cores)
     pool.map(runit, elements)
 
 
-def launch_segmentation(intput_dir, output_dir):
+def launch_segmentation(intput_dir, output_dir, cores=4):
 
     regex = os.path.join(intput_dir, "*.txt")
 
@@ -50,8 +49,7 @@ def launch_segmentation(intput_dir, output_dir):
                          input_filename,
                          output_filename])
 
-    nb_process = 14
-    pool = multiprocessing.Pool(nb_process)
+    pool = multiprocessing.Pool(cores)
     pool.map(runit, elements)
 
 def process_several_sets(iArgs, *iAction):
@@ -70,7 +68,8 @@ def process_several_sets(iArgs, *iAction):
                 lst_files = glob.glob(os.path.join(final_path, "*.txt"))
                 for a_file in lst_files:
                     action(a_file, 
-                        final2write)
+                        final2write, 
+                        cores=iArgs.cores)
 
 def main():
     parser = argparse.ArgumentParser(description='Tool to get the features and segmenet the tree point clouds')
@@ -80,6 +79,7 @@ def main():
     parser.add_argument("--severalDatasets", help="Process all the datasets contained in 1 folder", action="store_true")
     parser.add_argument("--sdRoot", type=str, help="Root folder, default:root", default="root")
     parser.add_argument("--setDistribution", type=str, help="Subfolders to evaluate, default:training,test", default="training,test")
+    parser.add_argument("--cores", type=int, help="Number of cores to use, default:4", default=4)
     args = parser.parse_args()
     if(args.severalDatasets):
         process_several_sets(args, launch_feature if args.action==0 else launch_segmentation)     
