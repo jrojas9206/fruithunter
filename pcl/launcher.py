@@ -65,9 +65,7 @@ def process_several_sets(iArgs, *iAction):
             if(not os.path.isdir(final2write)):
                 os.mkdir(final2write)
             for action in iAction:
-                lst_files = glob.glob(os.path.join(final_path, "*.txt"))
-                for a_file in lst_files:
-                    action(a_file, 
+                    action(final_path, 
                         final2write, 
                         cores=iArgs.cores)
 
