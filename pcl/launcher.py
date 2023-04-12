@@ -61,7 +61,7 @@ def process_several_sets(iArgs, *iAction):
         path2wrt = os.path.join(path2root, iArgs.path2write)
         if(not os.path.isdir(path2wrt)):
             os.mkdir(path2wrt)
-        for final_subdir in [i for i in iArgs.split(',')]:
+        for final_subdir in [i for i in iArgs.setDistribution.split(',')]:
             final_path = os.path.join(path2root, final_subdir)
             final2write = os.path.join(path2wrt, final_subdir)
             if(not os.path.isdir(final2write)):
