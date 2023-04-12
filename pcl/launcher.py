@@ -54,19 +54,40 @@ def launch_segmentation(intput_dir, output_dir):
     pool = multiprocessing.Pool(nb_process)
     pool.map(runit, elements)
 
+def process_several_sets(iArgs, *iAction):
+    dataset_folders = [a_folder for a_folder in os.listdir(iArgs.path2data) if(os.path.isdir(os.path.join(iArgs.path2data, a_folder)))]
+    for a_folder in dataset_folders:
+        path2root = os.path.join(iArgs.path2data, a_folder, iArgs.sdRoot)
+        path2wrt = os.path.join(path2root, iArgs.path2write)
+        if(not os.path.isdir(path2wrt)):
+            os.mkdir(path2wrt)
+        for final_subdir in [i for i in iArgs.split(',')]:
+            final_path = os.path.join(path2root, final_subdir)
+            final2write = os.path.join(path2wrt, final_subdir)
+            if(not os.path.isdir(final2write)):
+                os.mkdir(final2write)
+            for action in iAction:
+                action(final_path, 
+                       final2write)
+
 def main():
     parser = argparse.ArgumentParser(description='Tool to get the features and segmenet the tree point clouds')
-    parser.add_argument("--action", type=int, help="Action that want to be executed, extract features = 0, segment = 1", default=0)
     parser.add_argument("path2data", type=str, help="Path to the txt files that contain the point clouds")
     parser.add_argument("path2write", type=str, help="Path where you want to write the new data")
+    parser.add_argument("--action", type=int, help="Action that want to be executed, extract features = 0, segment = 1", default=0)
+    parser.add_argument("--severalDatasets", help="Process all the datasets contained in 1 folder", action="store_true")
+    parser.add_argument("--sdRoot", type=str, help="Root folder, default:root", default="root")
+    parser.add_argument("--setDistribution", type=str, help="Subfolders to evaluate, default:training,test", default="training,test")
     args = parser.parse_args()
-
-    if(args.action==0): # Get the feaures 
-        launch_feature(args.path2data,  args.path2write)
-    elif(args.action==1): # Segment the Apples 
-        launch_segmentation(args.path2data, args.path2write)
-    else:
-        print("-> Unexpected action value")
+    if(args.severalDatasets):
+        process_several_sets(args, launch_feature if args.action==0 else launch_segmentation)     
+    else:   
+        if(args.action==0): # Get the feaures 
+            launch_feature(args.path2data,  args.path2write)
+        elif(args.action==1): # Segment the Apples 
+            launch_segmentation(args.path2data, args.path2write)
+        else:
+            print("-> Unexpected action value")
         sys.exit(0)
 
 if __name__ == "__main__":
