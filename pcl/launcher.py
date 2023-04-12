@@ -67,8 +67,10 @@ def process_several_sets(iArgs, *iAction):
             if(not os.path.isdir(final2write)):
                 os.mkdir(final2write)
             for action in iAction:
-                action(final_path, 
-                       final2write)
+                lst_files = glob.glob(os.path.join(final_path, "*.txt"))
+                for a_file in lst_files:
+                    action(a_file, 
+                        final2write)
 
 def main():
     parser = argparse.ArgumentParser(description='Tool to get the features and segmenet the tree point clouds')
