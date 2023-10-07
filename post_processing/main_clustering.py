@@ -110,17 +110,11 @@ def pointcloud_clustering(pointcloud_list, dbscan_eps, dbscan_minsample, probThr
     for a_file in pointcloud_list:
         pointcloud_name, pointcloud_array = load_pointcloud(a_file)
 
-        idx2apple = np.where(pointcloud_array[:,3]>=probThreshold)
-        idx2zero = np.where(pointcloud_array[:,3]<probThreshold)
-
-        pointcloud_array[idx2apple, 3] = 1
-        pointcloud_array[idx2zero, 3] = 0
-
         pc = clustering(pointcloud_array,
                         10,
-                        0.1,
-                        None,
-                        None)
+                        0.01,
+                        10,
+                        0.007)
         
         np.savetxt(pointcloud_name, pc)
         print(np.unique(pc[:,3].astype(np.uint8)))
