@@ -114,11 +114,10 @@ def pointcloud_clustering(pointcloud_list, dbscan_eps, dbscan_minsample, probThr
                         10,
                         0.01,
                         10,
-                        0.007)
+                        0.00750)
         
         np.savetxt(pointcloud_name, pc)
-        print(np.unique(pc[:,3].astype(np.uint8)))
-        print(np.unique(pc[:,4].astype(np.uint8)))
+      
         sys.exit()
         nb_cluster, mean_volume, total_volume = measure_cluster(pc)
 
